@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.favorites.FavoritesFragment">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.jci.thecatapi.ui.favorites.FavoritesViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search by name..."
+            android:onQueryTextChange="@{(text) -> viewModel.Search(text)}"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.cats.size() == 0 ? android.view.View.VISIBLE : android.view.View.GONE }"
+            android:text="(no favorite cat)"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listViewCats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/searchView"/>
+    </RelativeLayout>
+
+</layout>
