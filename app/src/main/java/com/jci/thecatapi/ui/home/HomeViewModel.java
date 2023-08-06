@@ -1,25 +1,21 @@
 package com.jci.thecatapi.ui.home;
 
-import androidx.databinding.Bindable;
-
-import com.jci.thecatapi.database.CatDatabase;
-import com.jci.thecatapi.model.Cat;
+import com.jci.thecatapi.services.CatService;
 import com.jci.thecatapi.ui.CatListViewModel;
 
-import java.util.List;
-
 public class HomeViewModel extends CatListViewModel {
-
-    @Bindable
-    public List<Cat> getCats() {
-        List<Cat> cats = CatDatabase.GetCats();
-
-        if (search != null) {
-            List<Cat> filteredCats = CatDatabase.FindByName(search);
-            return filteredCats;
+    public HomeViewModel(CatService catService) {
+        super(catService);
+    }
+    CatService.CatListListener catListListener = this::setCats;
+    @Override
+    public void loadCats(){
+        setIsLoading(true);
+        String search = getSearch();
+        if (search != null && search.length() > 0) {
+            new Thread(() -> catService.findCatsByName(search, catListListener)).start();
         } else {
-            return cats;
+            new Thread(() -> catService.getCats(catListListener)).start();
         }
     }
-
 }

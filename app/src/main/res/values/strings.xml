@@ -2,4 +2,11 @@
     <string name="app_name">Cats</string>
     <string name="title_home">Cats</string>
     <string name="title_favorites">Favorites</string>
+    <string name="loading">loading…</string>
+    <string name="noFavorites">(no favorite cat)</string>
+    <string name="cat_picture">Cat picture</string>
+    <string name="life_span">Life Span</string>
+    <string name="temperament">Temperament</string>
+    <string name="description">Description</string>
+    <string name="favorite_heart">Favorite heart</string>
 </resources>

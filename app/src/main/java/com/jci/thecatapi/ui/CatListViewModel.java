@@ -1,27 +1,49 @@
 package com.jci.thecatapi.ui;
 
-import android.content.Context;
-import android.content.Intent;
-
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.databinding.library.baseAdapters.BR;
 
 import com.jci.thecatapi.model.Cat;
-import com.jci.thecatapi.ui.detail.DetailActivity;
+import com.jci.thecatapi.services.CatService;
 
-public class CatListViewModel extends BaseObservable {
-    public String search;
+import java.util.List;
 
-    public boolean Search(String text){
+public abstract class CatListViewModel extends BaseObservable {
+    protected CatService catService;
+    private String search;
+    @Bindable
+    public String getSearch() { return search; }
+    public void setSearch(String text){
         search = text;
-        notifyPropertyChanged(BR.cats);
-        return true;
+        notifyPropertyChanged(BR.search);
     }
-
-    public void Selected(Context context, Cat cat){
-        String a = cat.getName();
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("id", cat.getId());
-        context.startActivity(intent);
+    private List<Cat> cats;
+    @Bindable
+    public List<Cat> getCats() {
+        return cats;
+    }
+    protected void setCats(List<Cat> cats){
+        this.cats = cats;
+        notifyPropertyChanged(BR.cats);
+        setIsLoading(false);
+    }
+    private boolean isLoading;
+    @Bindable
+    public boolean getIsLoading(){
+        return isLoading;
+    }
+    public void setIsLoading(boolean isLoading){
+        this.isLoading = isLoading;
+        notifyPropertyChanged(BR.isLoading);
+    }
+    public abstract void loadCats();
+    public CatListViewModel(CatService catService){
+        this.catService = catService;
+        setIsLoading(true);
+    }
+    public boolean search(String text){
+        setSearch(text);
+        return true;
     }
 }

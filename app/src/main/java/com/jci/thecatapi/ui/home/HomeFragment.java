@@ -1,59 +1,89 @@
 package com.jci.thecatapi.ui.home;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.Observable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jci.thecatapi.BR;
 import com.jci.thecatapi.CatAdapter;
 import com.jci.thecatapi.R;
+import com.jci.thecatapi.database.DatabaseClient;
 import com.jci.thecatapi.databinding.FragmentHomeBinding;
+import com.jci.thecatapi.model.Cat;
+import com.jci.thecatapi.services.CatService;
+import com.jci.thecatapi.ui.detail.DetailActivity;
 
 public class HomeFragment extends Fragment {
     private HomeViewModel viewModel;
     private CatAdapter catAdapter;
     private FragmentHomeBinding binding;
+    private RecyclerView listViewCats;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        viewModel = new HomeViewModel();
-
+        CatService catService = new CatService(DatabaseClient.getInstance(requireContext()).getAppDatabase());
+        viewModel = new HomeViewModel(catService);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         binding.setViewModel(viewModel);
         binding.executePendingBindings();
-
         View root = binding.getRoot();
-
-        viewModel.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId == BR.cats)
-                    catAdapter.setList(viewModel.getCats());
-            }
-        });
-
-        catAdapter = new CatAdapter(viewModel.getCats(), position -> viewModel.Selected(getContext(), viewModel.getCats().get(position)));
-
-        RecyclerView listViewCats = (RecyclerView)root.findViewById(R.id.listViewCats);
+        listViewCats = root.findViewById(R.id.listViewCats);
         listViewCats.setHasFixedSize(true);
         listViewCats.setLayoutManager(new LinearLayoutManager(getContext()));
-        listViewCats.setAdapter(catAdapter);
-
+        viewModel.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.P)
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId == BR.search){
+                    viewModel.loadCats();
+                }
+                if (propertyId == BR.cats) {
+                    requireContext().getMainExecutor().execute(() -> {
+                        if (catAdapter == null) {
+                            catAdapter = new CatAdapter(viewModel.getCats(), onCatClicked);
+                        } else
+                            catAdapter.setList(viewModel.getCats());
+                        listViewCats.setAdapter(catAdapter);
+                    });
+                }
+            }
+        });
         return root;
+    }
+
+    CatAdapter.OnClickItemListener onCatClicked = new CatAdapter.OnClickItemListener() {
+        @Override
+        public void onClick(int position) {
+            Cat cat = catAdapter.get(position);
+            Intent intent = new Intent(getContext(), DetailActivity.class);
+            intent.putExtra("id", cat.getCatId());
+            requireContext().startActivity(intent);
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.loadCats();
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        viewModel = null;
+        catAdapter = null;
         binding = null;
+        listViewCats = null;
+        super.onDestroyView();
     }
 }

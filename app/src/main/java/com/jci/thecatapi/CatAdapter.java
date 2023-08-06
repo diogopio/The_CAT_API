@@ -27,7 +27,11 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.CatViewHolder>{
         this.clickListener = clickListener;
     }
 
-    public class CatViewHolder extends RecyclerView.ViewHolder{
+    public Cat get(int position){
+        return list.get(position);
+    }
+
+    public static class CatViewHolder extends RecyclerView.ViewHolder{
         TextView textViewName;
         TextView textViewOrigin;
         ImageView imageViewPicture;
@@ -61,12 +65,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.CatViewHolder>{
         holder.textViewName.setText(list.get(position).getName());
         holder.textViewOrigin.setText(list.get(position).getOrigin());
         holder.imageViewPicture.setImageResource(list.get(position).getImageId());
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickListener.onClick(index);
-            }
-        });
+        holder.view.setOnClickListener(view -> clickListener.onClick(index));
     }
 
     @Override

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.detail.DetailActivity">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.jci.thecatapi.ui.detail.DetailViewModel" />
     </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
         <Toolbar
             android:id="@+id/detail_toolbar"
             android:layout_width="match_parent"
@@ -23,112 +23,104 @@
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:title="Details" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/loading"
+                android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"/>
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <LinearLayout
-                    android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:visibility="@{viewModel.isLoading ? View.GONE : View.VISIBLE}">
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageViewPicture"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:scaleType="centerCrop"
-                        android:foregroundGravity="top"
-                        app:imageResource="@{viewModel.cat.imageId}"/>
+                    android:layout_height="wrap_content">
                     <LinearLayout
-                        android:layout_marginHorizontal="20dp"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
-
-                        <TextView
+                        <ImageView
+                            android:id="@+id/imageViewPicture"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="40sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="20dp"
-                            android:text="@{viewModel.cat.name}" />
-
-                        <TextView
+                            android:layout_height="250dp"
+                            android:scaleType="centerCrop"
+                            android:foregroundGravity="top"
+                            android:contentDescription="@string/cat_picture"
+                            app:imageResource="@{viewModel.cat.imageId}"/>
+                        <LinearLayout
+                            android:layout_marginHorizontal="20dp"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:textSize="25sp"
-                            android:text="@{viewModel.cat.origin}" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:layout_marginTop="20dp"
-                            android:textStyle="bold"
-                            android:text="Life Span" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="@{viewModel.cat.lifeSpan}" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:layout_marginTop="20dp"
-                            android:textStyle="bold"
-                            android:text="Temperament" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="@{viewModel.cat.temperament}" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:layout_marginTop="20dp"
-                            android:textStyle="bold"
-                            android:text="Description" />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:layout_marginBottom="20dp"
-                            android:text="@{viewModel.cat.description}" />
+                            android:layout_height="match_parent">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="40sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="20dp"
+                                android:text="@{viewModel.cat.name}" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:textSize="25sp"
+                                android:text="@{viewModel.cat.origin}" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:layout_marginTop="20dp"
+                                android:textStyle="bold"
+                                android:text="@string/life_span" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:text="@{viewModel.cat.lifeSpan}" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:layout_marginTop="20dp"
+                                android:textStyle="bold"
+                                android:text="@string/temperament" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:text="@{viewModel.cat.temperament}" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15sp"
+                                android:layout_marginTop="20dp"
+                                android:textStyle="bold"
+                                android:text="@string/description" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="20sp"
+                                android:layout_marginBottom="20dp"
+                                android:text="@{viewModel.cat.description}" />
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                    <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="10dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="fitXY"
+                        android:contentDescription="@string/favorite_heart"
+                        android:src="@{viewModel.cat.isFavorite  ? @drawable/favorite_on : @drawable/favorite_off}"
+                        android:onClick="@{() -> viewModel.toggleFavorite()}"/>
+                </RelativeLayout>
             </ScrollView>
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="10dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:visibility="@{ viewModel.cat.favorite ? android.view.View.VISIBLE : android.view.View.GONE }"
-                android:src="@drawable/favorite_on"
-                android:onClick="@{() -> viewModel.toggleFavorite()}"/>
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="10dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:visibility="@{ viewModel.cat.favorite ? android.view.View.GONE : android.view.View.VISIBLE }"
-                android:src="@drawable/favorite_off"
-                android:onClick="@{() -> viewModel.toggleFavorite()}"/>
         </RelativeLayout>
-
     </LinearLayout>
-
 </layout>
