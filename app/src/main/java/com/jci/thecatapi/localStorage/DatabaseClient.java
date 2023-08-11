@@ -1,14 +1,14 @@
-package com.jci.thecatapi.database;
+package com.jci.thecatapi.localStorage;
 
 import android.content.Context;
 import androidx.room.Room;
 
 public class DatabaseClient {
+    public static long syncAgeInMillis;
     private static DatabaseClient mInstance;
     private final CatDatabase appDatabase;
     private DatabaseClient(Context context) {
         appDatabase = Room.databaseBuilder(context, CatDatabase.class, "Cat.db")
-                .createFromAsset("Cat.db")
                 .fallbackToDestructiveMigration()
                 .build();
     }

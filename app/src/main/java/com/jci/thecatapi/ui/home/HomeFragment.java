@@ -17,23 +17,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jci.thecatapi.BR;
 import com.jci.thecatapi.CatAdapter;
+import com.jci.thecatapi.CatModule;
 import com.jci.thecatapi.R;
-import com.jci.thecatapi.database.DatabaseClient;
+import com.jci.thecatapi.components.DaggerHomeFragmentComponent;
 import com.jci.thecatapi.databinding.FragmentHomeBinding;
 import com.jci.thecatapi.model.Cat;
-import com.jci.thecatapi.services.CatService;
 import com.jci.thecatapi.ui.detail.DetailActivity;
 
+import javax.inject.Inject;
+
 public class HomeFragment extends Fragment {
-    private HomeViewModel viewModel;
+    @Inject
+    public HomeViewModel viewModel;
     private CatAdapter catAdapter;
     private FragmentHomeBinding binding;
     private RecyclerView listViewCats;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        CatService catService = new CatService(DatabaseClient.getInstance(requireContext()).getAppDatabase());
-        viewModel = new HomeViewModel(catService);
+        DaggerHomeFragmentComponent.builder().catModule(new CatModule(requireContext())).build().inject(this);
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
         binding.setViewModel(viewModel);
         binding.executePendingBindings();

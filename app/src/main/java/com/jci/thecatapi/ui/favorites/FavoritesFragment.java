@@ -17,23 +17,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jci.thecatapi.BR;
 import com.jci.thecatapi.CatAdapter;
+import com.jci.thecatapi.CatModule;
 import com.jci.thecatapi.R;
-import com.jci.thecatapi.database.DatabaseClient;
+import com.jci.thecatapi.components.DaggerFavoritesFragmentComponent;
 import com.jci.thecatapi.databinding.FragmentFavoritesBinding;
 import com.jci.thecatapi.model.Cat;
-import com.jci.thecatapi.services.CatService;
 import com.jci.thecatapi.ui.detail.DetailActivity;
 
+import javax.inject.Inject;
+
 public class FavoritesFragment extends Fragment {
-    private FavoritesViewModel viewModel;
+    @Inject
+    public FavoritesViewModel viewModel;
     private CatAdapter catAdapter;
     private FragmentFavoritesBinding binding;
     private RecyclerView listViewCats;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        CatService catService = new CatService(DatabaseClient.getInstance(requireContext()).getAppDatabase());
-        viewModel = new FavoritesViewModel(catService);
+        DaggerFavoritesFragmentComponent.builder().catModule(new CatModule(requireContext())).build().inject(this);
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false);
         binding.setViewModel(viewModel);
         binding.executePendingBindings();

@@ -23,8 +23,8 @@ public abstract class CatListViewModel extends BaseObservable {
     public List<Cat> getCats() {
         return cats;
     }
-    protected void setCats(List<Cat> cats){
-        this.cats = cats;
+    protected void setCats(List<Cat> catList){
+        this.cats = catList;
         notifyPropertyChanged(BR.cats);
         setIsLoading(false);
     }

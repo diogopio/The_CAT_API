@@ -1,4 +1,4 @@
-package com.jci.thecatapi.database;
+package com.jci.thecatapi.localStorage;
 
 import androidx.room.Database;
 import androidx.room.RoomDatabase;

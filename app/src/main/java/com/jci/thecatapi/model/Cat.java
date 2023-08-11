@@ -3,6 +3,8 @@ package com.jci.thecatapi.model;
 import androidx.annotation.NonNull;
 import androidx.room.*;
 
+import com.google.gson.Gson;
+
 @Entity
 public class Cat {
 
@@ -100,5 +102,10 @@ public class Cat {
     @Override
     public String toString() {
         return getName();
+    }
+
+    @Override
+    public int hashCode() {
+        return new Gson().toJson(this).hashCode();
     }
 }
